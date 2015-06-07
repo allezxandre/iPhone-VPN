@@ -1,14 +1,5 @@
-#/bin/bash
+#!/bin/bash
 set -e
-
-# Redirect all traffic
-echo 1 > /proc/sys/net/ipv4/ip_forward
-for each in /proc/sys/net/ipv4/conf/*
-do
-    echo 0 > $each/accept_redirects
-    echo 0 > $each/send_redirects
-done
-
 
 # Get the IP Address of the container
 IP_ADDRESS=$(ip addr show | grep inet | grep eth0 | cut -d/ -f1 | awk '{ print $2}' | head -n1)

@@ -1,4 +1,4 @@
-FROM debian:8
+FROM debian:7
 # This docker container is based on this tutorial:
 # http://vitobotta.com/l2tp-ipsec-vpn-ios/index.html
 MAINTAINER Alexandre Jouandin <alexandre@jouand.in>
@@ -25,4 +25,4 @@ EXPOSE 500/udp 4500/udp 1701/udp
 VOLUME ["/data"]
 
 # Start container
-CMD ["/start_vpn"]
+CMD /start_vpn
