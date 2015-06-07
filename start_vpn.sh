@@ -36,20 +36,17 @@ if [ ! -d /data/ipsec.conf ]; then
   mv /etc/ipsec.conf /data/ipsec.conf
   # Update IP Address 
   sed 's/SERVER_IP_REPLACE/'$IP_ADDRESS'/' /data/ipsec.conf 
-  echo "--- File ipsec.conf:"
-  cat /data/ipsec.conf 
-  echo '--------------------'
 fi
 rm /etc/ipsec.conf
 ln -sf /data/ipsec.conf /etc/ipsec.conf
+echo "--- File ipsec.conf:"
+cat /data/ipsec.conf 
+echo '--------------------'
   # ipsec.secrets
 if [ ! -d /data/ipsec.secrets ]; then
   mv /etc/ipsec.secrets /data/ipsec.secrets
   # Update IP Address 
   sed 's/SERVER_IP_REPLACE/'$IP_ADDRESS'/' /data/ipsec.secrets 
-  echo "--- File ipsec.secrets:"
-  cat /data/ipsec.secrets 
-  echo '--------------------'
   # Update secret
   if [ -z $SECRET ]; then
     SECRET="docker"
@@ -60,10 +57,36 @@ if [ ! -d /data/ipsec.secrets ]; then
 fi
 rm /etc/ipsec.secrets
 ln -sf /data/ipsec.secrets /etc/ipsec.secrets
+echo "--- File ipsec.secrets:"
+cat /data/ipsec.secrets 
+echo '--------------------'
+
+# xl2tpd.conf
+if [ ! -d /data/xl2tpd.conf ]; then
+  mv /etc/xl2tpd/xl2tpd.conf /data/xl2tpd.conf
+fi
+rm /etc/xl2tpd/xl2tpd.conf
+ln -sf /data/xl2tpd.conf /etc/xl2tpd/xl2tpd.conf
+
+# options.xl2tpd
+if [ ! -d /data/options.xl2tpd ]; then
+  mv /etc/ppp/options.xl2tpd /data/options.xl2tpd
+fi
+rm /etc/ppp/options.xl2tpd
+ln -sf /data/options.xl2tpd /etc/ppp/options.xl2tpd
+
+# chap-secrets
+if [ ! -d /data/chap-secrets ]; then
+  mv /etc/ppp/chap-secrets /data/chap-secrets
+fi
+rm /etc/ppp/chap-secrets
+ln -sf /data/chap-secrets /etc/ppp/chap-secrets
+
 
 # Start IPSec 
-service ipsec restart
-service xl2tpd restart 
+/etc/init.d/xl2tpd restart
+/etc/init.d/ipsec restart
+/etc/init.d/pppd-dns restart
 sleep 3 
 ipsec verify 
 
