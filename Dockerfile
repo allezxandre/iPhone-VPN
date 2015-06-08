@@ -6,7 +6,7 @@ MAINTAINER Alexandre Jouandin <alexandre@jouand.in>
 # Install VPN software
 RUN apt-get update && apt-get upgrade -qy
 RUN apt-get install -yq iptables lsof strongswan xl2tpd ppp
-
+RUN apt-get install -yq module-init-tools
 # Copy default configuration
 ADD ipsec.conf /etc/ipsec.conf
 ADD ipsec.secrets /etc/ipsec.secrets

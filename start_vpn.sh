@@ -26,6 +26,7 @@ iptables -A INPUT -p udp -m udp --dport 4500 -j ACCEPT
 iptables -A INPUT -p udp -m udp --dport 1701 -j ACCEPT
 iptables -t nat -A POSTROUTING -s 10.1.2.0/24 -o eth0 -j MASQUERADE
 iptables -A FORWARD -s 10.1.2.0/24 -j ACCEPT
+iptables -t nat -A POSTROUTING -s 10.1.2.0/24 -o eth0 -m policy --dir out --pol ipsec -j ACCEPT
 echo "Done"
 sleep 1
 
@@ -42,9 +43,9 @@ if [ ! -d /data/ipsec.conf ]; then
 fi
 rm -rf /etc/ipsec.conf
 ln -sf /data/ipsec.conf /etc/ipsec.conf
-echo "--- File ipsec.conf:"
+# echo "--- File ipsec.conf:"
 # cat /data/ipsec.conf 
-echo '--------------------'
+# echo '--------------------'
   # ipsec.secrets
 if [ ! -d /data/ipsec.secrets ]; then
   mv /etc/ipsec.secrets /data/ipsec.secrets
@@ -61,7 +62,7 @@ fi
 rm -rf /etc/ipsec.secrets
 ln -sf /data/ipsec.secrets /etc/ipsec.secrets
 echo "--- File ipsec.secrets:"
-# cat /data/ipsec.secrets 
+cat /data/ipsec.secrets 
 echo '--------------------'
 
 # xl2tpd.conf
@@ -88,12 +89,10 @@ ln -sf /data/chap-secrets /etc/ppp/chap-secrets
 
 # Start IPSec
 /etc/init.d/xl2tpd restart
-/etc/init.d/ipsec restart
 /etc/init.d/pppd-dns restart
 sleep 3 
-ipsec verify 
 
 /etc/init.d/ipsec stop 
-ipsec start
+ipsec start --nofork $@
 
 # (from https://github.com/rfadams/docker-l2tpipsec-vpn/blob/master/bin/run)
