@@ -21,7 +21,7 @@ RUN apt-get -y install supervisor && \
 
 # Copy supervisor files
 ADD supervisor/supervisor.conf /etc/supervisor.conf
-ADD supervisor/conf.d/ /etc/supervisor/conf.d/
+ADD supervisor/conf.d /etc/supervisor/conf.d/
 
 # Prepare start-up script
 ADD start_vpn.sh /start_vpn

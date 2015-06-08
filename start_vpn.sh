@@ -27,7 +27,7 @@ iptables -A INPUT -p udp -m udp --dport 1701 -j ACCEPT
 iptables -t nat -A POSTROUTING -s 10.1.2.0/24 -o eth0 -j MASQUERADE
 iptables -A FORWARD -s 10.1.2.0/24 -j ACCEPT
 echo "Done"
-sleep 5
+sleep 3
 
 # Set up permanent storage
 chmod 775 /data
@@ -43,7 +43,7 @@ fi
 rm -rf /etc/ipsec.conf
 ln -sf /data/ipsec.conf /etc/ipsec.conf
 echo "--- File ipsec.conf:"
-cat /data/ipsec.conf 
+# cat /data/ipsec.conf 
 echo '--------------------'
   # ipsec.secrets
 if [ ! -d /data/ipsec.secrets ]; then
@@ -61,7 +61,7 @@ fi
 rm -rf /etc/ipsec.secrets
 ln -sf /data/ipsec.secrets /etc/ipsec.secrets
 echo "--- File ipsec.secrets:"
-cat /data/ipsec.secrets 
+# cat /data/ipsec.secrets 
 echo '--------------------'
 
 # xl2tpd.conf
@@ -87,7 +87,12 @@ ln -sf /data/chap-secrets /etc/ppp/chap-secrets
 
 
 # Start IPSec with supervisor
-ipsec verify
+echo "IPSec verify:"
+# ipsec verify
+sleep 3
+echo "Supervisor conf files:"
+ls /etc/supervisor/conf.d/
+sleep 3
 supervisord -c /etc/supervisor.conf
 
 # (from https://github.com/rfadams/docker-l2tpipsec-vpn/blob/master/bin/run)
