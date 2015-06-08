@@ -5,7 +5,7 @@ MAINTAINER Alexandre Jouandin <alexandre@jouand.in>
 
 # Install VPN software
 RUN apt-get update && apt-get upgrade -y \
-                   && apt-get install -y iptables \
+                   && apt-get install -y iptables lsof \
                    && apt-get install -y openswan=1:2.6.37-3 \
                    && apt-get install -y xl2tpd ppp
 
