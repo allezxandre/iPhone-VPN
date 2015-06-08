@@ -18,7 +18,10 @@ ADD chap-secrets /etc/ppp/chap-secrets
 RUN apt-get -y install supervisor && \
   mkdir -p /var/log/supervisor && \
   mkdir -p /etc/supervisor/conf.d
-ADD supervisor.conf /etc/supervisor.conf
+
+# Copy supervisor files
+ADD supervisor/supervisor.conf /etc/supervisor.conf
+ADD supervisor/conf.d/ /etc/supervisor/conf.d/
 
 # Prepare start-up script
 ADD start_vpn.sh /start_vpn

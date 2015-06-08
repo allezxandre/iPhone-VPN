@@ -86,11 +86,8 @@ rm -rf /etc/ppp/chap-secrets
 ln -sf /data/chap-secrets /etc/ppp/chap-secrets
 
 
-# Start IPSec 
-/etc/init.d/xl2tpd restart
-/etc/init.d/ipsec restart
-/etc/init.d/pppd-dns restart
-sleep 3 
-ipsec verify 
+# Start IPSec with supervisor
+ipsec verify
+supervisord -c /etc/supervisor.conf
 
 # (from https://github.com/rfadams/docker-l2tpipsec-vpn/blob/master/bin/run)
