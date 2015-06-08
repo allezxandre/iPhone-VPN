@@ -38,7 +38,7 @@ chmod 775 /data
 if [ ! -d /data/ipsec.conf ]; then
   mv /etc/ipsec.conf /data/ipsec.conf
   # Update IP Address 
-  sed 's/SERVER_IP_REPLACE/'$IP_ADDRESS'/' /data/ipsec.conf 
+  sed -i.bak 's/SERVER_IP_REPLACE/'$IP_ADDRESS'/g'  /data/ipsec.conf 
 fi
 rm -rf /etc/ipsec.conf
 ln -sf /data/ipsec.conf /etc/ipsec.conf
@@ -49,14 +49,14 @@ echo '--------------------'
 if [ ! -d /data/ipsec.secrets ]; then
   mv /etc/ipsec.secrets /data/ipsec.secrets
   # Update IP Address 
-  sed 's/SERVER_IP_REPLACE/'$IP_ADDRESS'/' /data/ipsec.secrets 
+  sed -i.bak 's/SERVER_IP_REPLACE/'$IP_ADDRESS'/g'  /data/ipsec.secrets 
   # Update secret
   if [ -z $SECRET ]; then
     SECRET="docker"
     echo "WARNING! You haven't set a VPN secret"
     echo "Default secret: 'docker'"
   fi
-  sed 's/SECRET_REPLACE/'$SECRET'/' /data/ipsec.secrets
+  sed -i.bak 's/SECRET_REPLACE/'$SECRET'/g'  /data/ipsec.secrets
 fi
 rm -rf /etc/ipsec.secrets
 ln -sf /data/ipsec.secrets /etc/ipsec.secrets
