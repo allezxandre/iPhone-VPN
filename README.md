@@ -42,3 +42,14 @@ Now let me explain why we need all of this:
 	* `/lib/modules` is needed for the VPN server to have the true Kernel of your machine. Unfortunately, I suppose your system has to have the same Kernel as the docker container, so I don't know how this would work on non-debian/ubuntu machines.
 
 ---
+
+## Credits
+
+I used the following websites during the creation of this Docker Image:
+
+* [`forceencaps=yes`](http://serverfault.com/a/588079/292994)
+* [Openswan tutorial](http://vitobotta.com/l2tp-ipsec-vpn-ios/index.html)
+* the following GitHub repos:
+	* [zealic's](https://github.com/zealic/docker-library-ipsec)
+	* [rfadams'](https://github.com/rfadams/docker-l2tpipsec-vpn)
+* [An interesting Strongswan mini tutorial](http://serverfault.com/a/215262/292994)
