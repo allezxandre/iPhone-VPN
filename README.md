@@ -17,3 +17,13 @@ When this is done, just build with
 ```bash 
 docker build -t $YOUR_USERNAME/iphone-vpn
 ```
+
+To keep your configuration even after you `rm` your container, you can use a folder on your host to keep the files. Personnaly, I use `/srv/docker/iphone-vpn`.
+
+## Run 
+
+To run, just use this command: 
+
+```bash
+docker run --privileged --name="vpn-server" -p 500:500/udp -p 4500:4500/udp -p 1701:1701/udp -v /srv/docker/iphone-vpn:/data allezxandre/iphone-vpn:latest
+```
