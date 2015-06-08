@@ -10,7 +10,11 @@ do
 done
 
 # Get the IP Address of the container
-IP_ADDRESS=$(ip addr show | grep inet | grep eth0 | cut -d/ -f1 | awk '{ print $2}' | head -n1)
+if [ -z "${IP_ADDRESS}" ]; then
+    # find IP Address
+    echo "No IP has been given"
+    IP_ADDRESS=$(ip addr show | grep inet | grep eth0 | cut -d/ -f1 | awk '{ print $2}' | head -n1)
+fi
 echo "The IP Address of this server is $IP_ADDRESS"
 
 # Set up IPTables
