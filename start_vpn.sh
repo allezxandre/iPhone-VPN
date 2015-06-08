@@ -2,17 +2,19 @@
 set -e
 
 # Redirect all traffic
+echo "Setting up redirection..."
 echo 1 > /proc/sys/net/ipv4/ip_forward
 for each in /proc/sys/net/ipv4/conf/*
 do
     echo 0 > $each/accept_redirects
     echo 0 > $each/send_redirects
 done
+echo "Done"
 
 # Get the IP Address of the container
 if [ -z "${IP_ADDRESS}" ]; then
     # find IP Address
-    echo "No IP has been given"
+    echo "No IP has been given. Trying to guess..."
     IP_ADDRESS=$(ip addr show | grep inet | grep eth0 | cut -d/ -f1 | awk '{ print $2}' | head -n1)
 fi
 echo "The IP Address of this server is $IP_ADDRESS"
@@ -25,12 +27,12 @@ iptables -A INPUT -p udp -m udp --dport 1701 -j ACCEPT
 iptables -t nat -A POSTROUTING -s 10.1.2.0/24 -o eth0 -j MASQUERADE
 iptables -A FORWARD -s 10.1.2.0/24 -j ACCEPT
 echo "Done"
+sleep 5
 
 # Set up permanent storage
 chmod 775 /data
 
 # Add default configuration
-
 # IPSec
   # ipsec.conf
 if [ ! -d /data/ipsec.conf ]; then
@@ -91,9 +93,4 @@ ln -sf /data/chap-secrets /etc/ppp/chap-secrets
 sleep 3 
 ipsec verify 
 
-# Keep the container running
 # (from https://github.com/rfadams/docker-l2tpipsec-vpn/blob/master/bin/run)
-while [ true ]; do
-      echo "ipsec working"
-      sleep 60
-done

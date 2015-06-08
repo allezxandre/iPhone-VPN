@@ -4,10 +4,8 @@ FROM debian:7
 MAINTAINER Alexandre Jouandin <alexandre@jouand.in>
 
 # Install VPN software
-RUN apt-get update && apt-get upgrade -y \
-                   && apt-get install -y iptables lsof \
-                   && apt-get install -y openswan=1:2.6.37-3 \
-                   && apt-get install -y xl2tpd ppp
+RUN apt-get update && apt-get upgrade -qy
+RUN apt-get install -yq iptables lsof openswan=1:2.6.37-3 xl2tpd ppp
 
 # Copy default configuration
 ADD ipsec.conf /etc/ipsec.conf
@@ -15,6 +13,12 @@ ADD ipsec.secrets /etc/ipsec.secrets
 ADD xl2tpd.conf /etc/xl2tpd/xl2tpd.conf
 ADD options.xl2tpd /etc/ppp/options.xl2tpd
 ADD chap-secrets /etc/ppp/chap-secrets
+
+# Install Supervisord
+RUN apt-get -y install supervisor && \
+  mkdir -p /var/log/supervisor && \
+  mkdir -p /etc/supervisor/conf.d
+ADD supervisor.conf /etc/supervisor.conf
 
 # Prepare start-up script
 ADD start_vpn.sh /start_vpn
