@@ -14,15 +14,6 @@ ADD xl2tpd.conf /etc/xl2tpd/xl2tpd.conf
 ADD options.xl2tpd /etc/ppp/options.xl2tpd
 ADD chap-secrets /etc/ppp/chap-secrets
 
-# Install Supervisord
-RUN apt-get -y install supervisor && \
-  mkdir -p /var/log/supervisor && \
-  mkdir -p /etc/supervisor/conf.d
-
-# Copy supervisor files
-ADD supervisor/supervisor.conf /etc/supervisor.conf
-ADD supervisor/conf.d /etc/supervisor/conf.d/
-
 # Prepare start-up script
 ADD start_vpn.sh /start_vpn
 RUN chmod 755 /start_vpn
