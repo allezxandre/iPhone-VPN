@@ -1,0 +1,16 @@
+[Unit]
+Description=IPSec VPN Server
+After=docker.service 
+Requires=docker.service
+
+[Service]
+Type=notify
+NotifyAccess=all
+TimeoutStartSec=20
+TimeoutStopSec=10
+Restart=always
+RestartSec=15s
+ExecStart=/usr/bin/systemd-docker run --rm --privileged --name='vpn-server' -e SECRET=docker -p 500:500/udp -p 4500:4500/udp -p 1701:1701/udp -v /srv/docker/iphone-vpn:/data -v /lib/modules:/lib/modules allezxandre/iphone-vpn:latest
+
+[Install]
+WantedBy=multi-user.target

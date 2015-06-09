@@ -17,17 +17,23 @@ if [ -z "${IP_ADDRESS}" ]; then
     echo "No IP has been given. Trying to guess..."
     IP_ADDRESS=$(ip addr show | grep inet | grep eth0 | cut -d/ -f1 | awk '{ print $2}' | head -n1)
 fi
-echo "The IP Address of this server is $IP_ADDRESS"
-
+echo "The IP Address of the docker container is $IP_ADDRESS"
+PUBLIC_IP=$(curl -s -4 http://ip.mtak.nl)
+echo "The public IP Address of this server is $PUBLIC_IP"
 # Set up IPTables
 echo "Setting up IP Tables..."
 iptables -A INPUT -p udp -m udp --dport 500 -j ACCEPT
 iptables -A INPUT -p udp -m udp --dport 4500 -j ACCEPT
 iptables -A INPUT -p udp -m udp --dport 1701 -j ACCEPT
 iptables -t nat -A POSTROUTING -s 10.1.2.0/24 -o eth0 -j MASQUERADE
+iptables -t nat -A POSTROUTING -j SNAT --to-source ${PUBLIC_IP} -o eth+
 iptables -A FORWARD -s 10.1.2.0/24 -j ACCEPT
 echo "Done"
 sleep 2
+
+# Start rsyslog
+echo "Starting rsyslog..."
+service rsyslog start
 
 # Set up permanent storage
 chmod 775 /data
@@ -92,10 +98,5 @@ ln -sf /data/chap-secrets /etc/ppp/chap-secrets
 /etc/init.d/ipsec restart
 /etc/init.d/pppd-dns restart
 sleep 3 
-ipsec verify 
-
-while [[ true ]]; do
-  echo "Container running"
-  sleep 60
-done
+ipsec verify && tail -F /var/log/syslog 
 # (from https://github.com/rfadams/docker-l2tpipsec-vpn/blob/master/bin/run)
