@@ -17,7 +17,7 @@ and add usernames/passwords in the file. You'll be able to modify this file late
 When this is done, just build with
 
 ```bash 
-docker build -t $YOUR_USERNAME/iphone-vpn
+docker build -t $YOUR_USERNAME/iphone-vpn .
 ```
 
 To keep your configuration even after you `rm` your container, you can use a folder on your host to keep the files. Personnaly, I use `/srv/docker/iphone-vpn`.
